@@ -2,8 +2,9 @@ const express = require("express");
 const path = require("path");
 const { Station } = require("@fridgefm/radio-core");
 
-const port = 3001;
 const server = express();
+
+server.use(express.static("public"));
 
 const station = new Station({
   verbose: true,
@@ -19,11 +20,11 @@ server.get("/stream", (req, res) => {
   station.connectListener(req, res);
 });
 
-server.listen(port, () => {
-  console.log(`Starting on http://localhost:${port}`);
+server.listen(process.env.PORT || 3000, () => {
+  console.log(`Starting on http://localhost:${process.env.PORT || 3000}`);
   station.start();
 });
 
-server.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./streamaudio.html"));
+server.get("/", (req, res) => {
+  res.send(" ");
 });
